@@ -25,11 +25,16 @@ def start(message: types.Message):
         user = [message.text, message.chat.type, "None", "None", message.from_user.id]
         cursor.execute("INSERT INTO login_id VALUES(?,?,?,?,?);", user)
         connect.commit()
+        bot.send_message(message.chat.id, 'Привет! Я добавил вас в свою базу данных! Можете написать /help чтобы узнать, что я умею.')
     else:
         bot.send_message(message.chat.id, 'Вы уже есть в базе данных!')
 @bot.message_handler(commands=['help'])
 def help(message):
-    bot.send_message(message.chat.id, "Hey there! I am a bit of a bot. Here are some of the commands: \n"
+    connect = sqlite3.connect('users.db')
+    cursor = connect.cursor()
+    u_id = message.chat.id
+    cursor.execute(f"UPDATE login_id SET cmd = '{message.text[1:]}' WHERE id = {u_id}")
+    bot.send_message(message.chat.id, "Вот вещи, которые я умею: \n"
                                                     "/settings - настройки\n"
                                                     "/weather - выбор города, отображение погоды\n"
                                                     "/news - выбор категории, отображение новостей\n"
@@ -39,8 +44,8 @@ def help(message):
 def settings(message):
     connect = sqlite3.connect('users.db')
     cursor = connect.cursor()
-    print(message.text)
     u_id = message.chat.id
+    cursor.execute(f"UPDATE login_id SET cmd = '{message.text[1:]}' WHERE id = {u_id}")
     cursor.execute(f"SELECT town FROM login_id WHERE id = {u_id}")
     town = str(cursor.fetchone())[2:-3]
     cursor.execute(f"SELECT cfg FROM login_id WHERE id = {u_id}")
