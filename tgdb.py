@@ -1,9 +1,12 @@
 import telebot
 from telebot import TeleBot, types
 import sqlite3
+from dotenv import load_dotenv
+import os
 import Pamail, Paria, Panek
 
-bot = TeleBot(".**<<TOKEN>>**.")
+load_dotenv()
+bot = TeleBot(os.getenv("TOKEN"))
 @bot.message_handler(commands=['start'])
 def start(message: types.Message):
     connect = sqlite3.connect('users.db')
