@@ -14,8 +14,11 @@ File users.db has 5 columns for each user.
 
 ![image](https://github.com/Alanyle/studtgbot/assets/162821077/13ea7ca2-2ebc-495e-9c8d-528f720ef024)
 
-/help выводит список команд, /weather при имеющемся в бд городе выдаёт погоду в вашем городе, иначе спрашивает город и записывает его в бд, после чего выдаёт погоду
+/help выводит список команд, 
+/weather при имеющемся в бд городе выдаёт погоду в вашем городе, иначе спрашивает город и записывает его в бд, после чего выдаёт погоду
+
 ![image](https://github.com/Alanyle/studtgbot/assets/162821077/49a14d5e-22b1-41ef-af8e-e337fe2c01e7)
+![image](https://github.com/Alanyle/studtgbot/assets/162821077/7858f4d9-5ca0-40b1-a4ba-574f00265f08)
 
 /settings даёт выбор между настройкой города или категории новостей сохраняя их в базе данных и сразу же выдавая результат
 
