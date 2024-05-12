@@ -12,7 +12,7 @@ File users.db has 5 columns for each user.
 
 /start добавляет нового пользователя в бд, /delete удаляет его из бд
 
-![image](https://github.com/Alanyle/studtgbot/assets/162821077/dfdf3ead-27d2-428b-8bb9-cd9d9f84b5b3)
+![image](https://github.com/Alanyle/studtgbot/assets/162821077/13ea7ca2-2ebc-495e-9c8d-528f720ef024)
 
 /help выводит список команд, /weather при имеющемся в бд городе выдаёт погоду в вашем городе, иначе спрашивает город и записывает его в бд, после чего выдаёт погоду
 ![image](https://github.com/Alanyle/studtgbot/assets/162821077/49a14d5e-22b1-41ef-af8e-e337fe2c01e7)
