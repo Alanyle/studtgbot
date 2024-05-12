@@ -1,42 +1,49 @@
 import telebot
 from telebot import TeleBot, types
-import sqlite3
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import sessionmaker, declarative_base
 from dotenv import load_dotenv
 import os
-import Pamail, Paria, Panek
+import Pamail, Paria, Panek, check
 
+Base = declarative_base()
+engine = create_engine('sqlite:///tg.db')
+Base.metadata.create_all(engine)
+class User(Base):
+    __tablename__ = 'users'
+    __table_args__ = {'extend_existing': True}
+    cmd = Column(String)
+    typ = Column(String)
+    town = Column(String)
+    cfg = Column(String)
+    id = Column(Integer, primary_key=True)
+Session = sessionmaker(bind=engine)
+session = Session()
 load_dotenv()
 bot = TeleBot(os.getenv("TOKEN"))
 @bot.message_handler(commands=['start'])
 def start(message: types.Message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS login_id(
-        cmd STRING,
-        type STRING,
-        town STRING,
-        cfg STRING,
-        id INTEGER)""")
-    connect.commit()
-
+    session.commit()
     #check id
     u_id = message.chat.id
-    cursor.execute(f"SELECT id FROM login_id WHERE id = {u_id}")
-    data = cursor.fetchone()
+    data = session.get(User, u_id)
+    session.query(User).filter_by(id=u_id).update({'cmd': str(message.text[1:])})
+    print(str(session.query(User.cmd).filter(User.id == u_id).first()))
+    print(data)
     if data is None:
         #add values
-        user = [message.text, message.chat.type, "None", "None", message.from_user.id]
-        cursor.execute("INSERT INTO login_id VALUES(?,?,?,?,?);", user)
-        connect.commit()
-        bot.send_message(message.chat.id, 'Привет! Я добавил вас в свою базу данных! Можете написать /help чтобы узнать, что я умею.')
+        user = User(cmd = message.text[1:], typ = message.chat.type, town = "None", cfg = "None", id = message.from_user.id)
+        session.add(user)
+        session.commit()
+        bot.send_message(message.chat.id, 'Привет! Я добавил вас в свою базу данных! '
+                                          'Можете написать /help чтобы узнать, что я умею.')
     else:
         bot.send_message(message.chat.id, 'Вы уже есть в базе данных!')
 @bot.message_handler(commands=['help'])
 def help(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
     u_id = message.chat.id
-    cursor.execute(f"UPDATE login_id SET cmd = '{message.text[1:]}' WHERE id = {u_id}")
+    session.query(User).filter_by(id=u_id).update({'cmd': str(message.text[1:])})
+    print(str(session.query(User.cmd).filter(User.id == u_id).first()))
     bot.send_message(message.chat.id, "Вот вещи, которые я умею: \n"
                                                     "/settings - настройки\n"
                                                     "/weather - выбор города, отображение погоды\n"
@@ -45,136 +52,126 @@ def help(message):
                                                     "/delete - удалить себя из базы данных\n")
 @bot.message_handler(commands=['settings'])
 def settings(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
     u_id = message.chat.id
-    cursor.execute(f"UPDATE login_id SET cmd = '{message.text[1:]}' WHERE id = {u_id}")
-    cursor.execute(f"SELECT town FROM login_id WHERE id = {u_id}")
-    town = str(cursor.fetchone())[2:-3]
-    cursor.execute(f"SELECT cfg FROM login_id WHERE id = {u_id}")
-    cfg = str(cursor.fetchone())[2:-3]
-    connect.commit()
+    session.query(User).filter_by(id=u_id).update({'cmd': str(message.text[1:])})
+    print(str(session.query(User.cmd).filter(User.id == u_id).first()))
+    town = str(session.query(User.town).filter(User.id == u_id).first())[2:-3]
+    cfg = str(session.query(User.cfg).filter(User.id == u_id).first())[2:-3]
+    session.commit()
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton("1. Ваш город ("+town+")")
     btn2 = types.KeyboardButton("2. Категория новостей ("+cfg+")")
     markup.add(btn1, btn2)
     bot.send_message(message.chat.id, 'Что вы хотите настроить?', reply_markup=markup)
-    bot.register_next_step_handler(message, setting)
-def setting(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
+    bot.register_next_step_handler(message, setting, u_id)
+def setting(message, u_id):
     print(message.text)
     if (message.text.count('1' or 'Город')):
         bot.send_message(message.chat.id, 'Введите свой город транслитом(например: omsk, moskva)', reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
         bot.register_next_step_handler(message, settown)
     else:
-        cursor.execute(f"UPDATE login_id SET cfg = 'None' WHERE id = {message.chat.id}")
-        connect.commit()
+        session.query(User).filter_by(id=u_id).update({'cfg': "None"})
         news(message)
         ##bot.register_next_step_handler(message, news)
 @bot.message_handler(commands=['weather'])
 def weather(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
     u_id = message.chat.id
-    cursor.execute(f"select cmd from login_id WHERE id={u_id}")
-    cursor.execute(f"UPDATE login_id SET cmd = '{message.text[1:]}' WHERE id = {u_id}")
-    cursor.execute(f"SELECT town FROM login_id WHERE id = {u_id}")
-    connect.commit()
-    town = str(cursor.fetchone())[2:-3]
+    session.query(User).filter_by(id=u_id).update({'cmd': str(message.text[1:])})
+    session.commit()
+    town = str(session.query(User.town).filter(User.id == u_id).first())[2:-3]
     print(town)
-    if town == "None":
-        bot.send_message(message.chat.id, 'Введите свой город транслитом(например: omsk, moskva)')
-        bot.register_next_step_handler(message, settown)
+    if check.check(u_id) == True:
+        if town == "None":
+            bot.send_message(message.chat.id, 'Введите свой город транслитом(например: omsk, moskva)')
+            bot.register_next_step_handler(message, settown)
+        else:
+            bot.send_message(message.chat.id, Pamail.parse(town), reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
     else:
-        bot.send_message(message.chat.id, Pamail.parse(town), reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
+        bot.send_message(message.chat.id, check.check(u_id))
 
 def settown(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
     print(message.text)
     u_id = message.chat.id
-    cursor.execute(f"UPDATE login_id SET town = '{message.text}' WHERE id = {u_id}")
-    cursor.execute(f"SELECT town FROM login_id WHERE id = {u_id}")
-    connect.commit()
+    session.query(User).filter_by(id=u_id).update({'town': str(message.text)})
+    town = str(session.query(User.town).filter(User.id == u_id).first())[2:-3]
+    session.commit()
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton("1. Да")
     btn2 = types.KeyboardButton("2. Нет")
     markup.add(btn1, btn2)
-    bot.send_message(message.chat.id, 'Ваш город - ' + str(cursor.fetchone())[2:-3] + '?', reply_markup=markup)
+    bot.send_message(message.chat.id, 'Ваш город - ' + town + '?', reply_markup=markup)
     bot.register_next_step_handler(message, report)
 def report(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
-    cursor.execute(f"SELECT town FROM login_id WHERE id = {message.chat.id}")
     print(message.text)
     if (message.text.count('2' or 'Нет')):
         bot.send_message(message.chat.id, 'Введите свой город транслитом(например: omsk, moskva)', reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
         bot.register_next_step_handler(message, settown)
     else:
-        town = str(cursor.fetchone())[2:-3]
+        town = str(session.query(User.town).filter(User.id == message.chat.id).first())[2:-3]
         bot.send_message(message.chat.id, Pamail.parse(town), reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
 @bot.message_handler(commands=['news'])
 def news(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
     u_id = message.chat.id
-    cursor.execute(f"select cmd from login_id WHERE id={u_id}")
-    cursor.execute(f"UPDATE login_id SET cmd = '{message.text[1:]}' WHERE id = {u_id}")
-    cursor.execute(f"SELECT cfg FROM login_id WHERE id = {u_id}")
-    connect.commit()
-    cfg = str(cursor.fetchone())[2:-3]
+    session.query(User).filter_by(id=u_id).update({'cmd': 'news'})
+    cfg = str(session.query(User.cfg).filter(User.id == message.chat.id).first())[2:-3]
+    session.commit()
     print(cfg)
-    if cfg == "None":
-        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-        btn1 = types.KeyboardButton("1. Политика")
-        btn2 = types.KeyboardButton("2. В мире")
-        btn3 = types.KeyboardButton("3. Экономика")
-        btn4 = types.KeyboardButton("4. Общество")
-        btn5 = types.KeyboardButton("5. Происшествия")
-        btn6 = types.KeyboardButton("6. Армия")
-        btn7 = types.KeyboardButton("7. Наука")
-        btn8 = types.KeyboardButton("8. Спорт")
-        btn9 = types.KeyboardButton("9. Культура")
-        btn10 = types.KeyboardButton("10. Религия")
-        btn11 = types.KeyboardButton("11. Туризм")
-        markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, btn11)
-        bot.send_message(message.chat.id, 'В какой категории хотите читать новости?', reply_markup=markup)
-        bot.register_next_step_handler(message, newscat)
+    if check.check(u_id) == True:
+        if cfg == "None":
+            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+            btn1 = types.KeyboardButton("1. Политика")
+            btn2 = types.KeyboardButton("2. В мире")
+            btn3 = types.KeyboardButton("3. Экономика")
+            btn4 = types.KeyboardButton("4. Общество")
+            btn5 = types.KeyboardButton("5. Происшествия")
+            btn6 = types.KeyboardButton("6. Армия")
+            btn7 = types.KeyboardButton("7. Наука")
+            btn8 = types.KeyboardButton("8. Спорт")
+            btn9 = types.KeyboardButton("9. Культура")
+            btn10 = types.KeyboardButton("10. Религия")
+            btn11 = types.KeyboardButton("11. Туризм")
+            markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, btn11)
+            bot.send_message(message.chat.id, 'В какой категории хотите читать новости?', reply_markup=markup)
+            bot.register_next_step_handler(message, newscat)
+        else:
+            bot.send_message(message.chat.id, Paria.parse(cfg), reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
     else:
-        bot.send_message(message.chat.id, Paria.parse(cfg), reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
+        bot.send_message(message.chat.id, check.check(u_id))
+
 def newscat(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
     u_id = message.chat.id
     cfgn = int(message.text.split('.')[0])-1
     cat = ['politics', 'world', 'economy', 'society', 'incidents','defense_safety','science','sport','culture','religion','tourism']
     print(cfgn,cat[cfgn])
-    cursor.execute(f"UPDATE login_id SET cfg = '{cat[cfgn]}' WHERE id = {u_id}")
-    cursor.execute(f"SELECT cfg FROM login_id WHERE id = {u_id}")
-    connect.commit()
-    cfg = str(cursor.fetchone())[2:-3]
+    session.query(User).filter_by(id=u_id).update({'cfg': str(cat[cfgn])})
+    cfg = str(session.query(User.cfg).filter(User.id == message.chat.id).first())[2:-3]
+    session.commit()
     print(cfg)
     bot.send_message(message.chat.id, Paria.parse(cfg), reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
 
 @bot.message_handler(commands=['joke'])
 def joke(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
     u_id = message.chat.id
-    cursor.execute(f"select cmd from login_id WHERE id={u_id}")
-    cursor.execute(f"UPDATE login_id SET cmd = '{message.text[1:]}' WHERE id = {u_id}")
-    connect.commit()
-    bot.send_message(message.chat.id, Panek.parse(), reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
+    session.query(User).filter_by(id=u_id).update({'cmd': str(message.text[1:])})
+    session.commit()
+    if check.check(u_id) == True:
+        bot.send_message(message.chat.id, Panek.parse(), reply_markup=types.ReplyKeyboardRemove(), parse_mode='Markdown')
+    else:
+        bot.send_message(message.chat.id, check.check(u_id))
 
 @bot.message_handler(commands=['delete'])
 def delete(message):
-    connect = sqlite3.connect('users.db')
-    cursor = connect.cursor()
+    u_id = int(message.chat.id)
+    data = session.get(User, u_id)
+    session.query(User).filter_by(id=u_id).update({'cmd': str(message.text[1:])})
+    print(session.query(User.cmd).filter_by(id=u_id).first())
+    if data != None:
+        x = session.query(User).filter_by(id=u_id).first()
+        session.delete(x)
+        session.commit()
+        bot.send_message(message.chat.id, 'Вы успешно удалены из базы данных')
+    else:
+        bot.send_message(message.chat.id, 'Вас нет в базе! Чтобы удалить себя из базы, сначала добавьтесь в неё!')
 
-    u_id = message.chat.id
-    cursor.execute(f"DELETE FROM login_id WHERE id = {u_id}")
-    connect.commit()
-    bot.send_message(message.chat.id, 'Вы успешно удалены из базы данных')
 
 bot.polling()

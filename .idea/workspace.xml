@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="33db0ccd-177c-450c-a544-994d073622f4" name="Changes" comment="">
+    <list default="true" id="33db0ccd-177c-450c-a544-994d073622f4" name="Changes" comment="Token added in dotenv">
+      <change afterPath="$PROJECT_DIR$/check.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pamail.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pamail.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Panek.py" beforeDir="false" afterPath="$PROJECT_DIR$/Panek.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Paria.py" beforeDir="false" afterPath="$PROJECT_DIR$/Paria.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tgdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/tgdb.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/users.db" afterDir="false" />
     </list>
@@ -47,6 +52,7 @@
     "Python.Paweather.executor": "Run",
     "Python.Pawthrmail.executor": "Run",
     "Python.Pawthrworld.executor": "Run",
+    "Python.check.executor": "Run",
     "Python.main.executor": "Run",
     "Python.tgdb.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
@@ -96,6 +102,19 @@
       <option name="presentableId" value="Default" />
       <updated>1715426734589</updated>
     </task>
+    <task id="LOCAL-00001" summary="Token added in dotenv">
+      <option name="closed" value="true" />
+      <created>1715465151005</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1715465151005</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Token added in dotenv" />
+    <option name="LAST_COMMIT_MESSAGE" value="Token added in dotenv" />
   </component>
 </project>
