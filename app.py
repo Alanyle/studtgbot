@@ -1,14 +1,8 @@
-import telebot
-from telebot import TeleBot, types
+#DataBase tg.db management
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import sessionmaker, declarative_base
-from dotenv import load_dotenv
-import os
-import Pamail, Paria, Panek, check
-
 Base = declarative_base()
 engine = create_engine('sqlite:///tg.db')
-Base.metadata.create_all(engine)
 class User(Base):
     __tablename__ = 'users'
     __table_args__ = {'extend_existing': True}
@@ -19,8 +13,15 @@ class User(Base):
     id = Column(Integer, primary_key=True)
 Session = sessionmaker(bind=engine)
 session = Session()
+Base.metadata.create_all(engine) #creating table users if not exists
+#telegram bot
+from telebot import TeleBot, types
+from dotenv import load_dotenv
+import os
 load_dotenv()
 bot = TeleBot(os.getenv("TOKEN"))
+#local files
+import Pamail, Paria, Panek, check
 @bot.message_handler(commands=['start'])
 def start(message: types.Message):
     session.commit()

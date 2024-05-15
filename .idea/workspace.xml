@@ -4,15 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="33db0ccd-177c-450c-a544-994d073622f4" name="Changes" comment="Token added in dotenv">
-      <change afterPath="$PROJECT_DIR$/check.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="33db0ccd-177c-450c-a544-994d073622f4" name="Changes" comment="Switched to SQLAlchemy(v. SQLite3 in zntgdb3.py)&#10;Big QoL improvements(fixed all possible errors)">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pamail.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pamail.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Panek.py" beforeDir="false" afterPath="$PROJECT_DIR$/Panek.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Paria.py" beforeDir="false" afterPath="$PROJECT_DIR$/Paria.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tgdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/tgdb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.db" beforeDir="false" afterPath="$PROJECT_DIR$/users.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tg.db" beforeDir="false" afterPath="$PROJECT_DIR$/tg.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tgdb.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users.db" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,6 +23,7 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -52,18 +49,20 @@
     "Python.Paweather.executor": "Run",
     "Python.Pawthrmail.executor": "Run",
     "Python.Pawthrworld.executor": "Run",
+    "Python.app.executor": "Run",
     "Python.check.executor": "Run",
     "Python.main.executor": "Run",
     "Python.tgdb.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/0d/std_labs_tw-main",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/0d/studtgbot/tgdb.py",
     "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
   }
 }]]></component>
   <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="app" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="studtgbot" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -76,7 +75,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="D:\0d\studtgbot\app.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -110,11 +109,20 @@
       <option name="project" value="LOCAL" />
       <updated>1715465151005</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Switched to SQLAlchemy(v. SQLite3 in zntgdb3.py)&#10;Big QoL improvements(fixed all possible errors)">
+      <option name="closed" value="true" />
+      <created>1715513233193</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1715513233193</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Token added in dotenv" />
-    <option name="LAST_COMMIT_MESSAGE" value="Token added in dotenv" />
+    <MESSAGE value="Switched to SQLAlchemy(v. SQLite3 in zntgdb3.py)&#10;Big QoL improvements(fixed all possible errors)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Switched to SQLAlchemy(v. SQLite3 in zntgdb3.py)&#10;Big QoL improvements(fixed all possible errors)" />
   </component>
 </project>
