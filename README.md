@@ -6,6 +6,8 @@ News parser - Paria.py (https://ria.ru/)
 
 Jokes parser - Panek.py (https://anekdoty.ru/pro-programmistov/)
 
+Checking for user in the DB - check.py
+
 File users.db has 5 columns for each user.
 
 ![image](https://github.com/Alanyle/studtgbot/assets/162821077/74867d09-1189-46cd-b412-e3494d1a691c)![image](https://github.com/Alanyle/studtgbot/assets/162821077/f9794d35-a5da-438b-a6e4-58a735ad5269)
