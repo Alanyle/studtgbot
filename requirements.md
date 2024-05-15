@@ -1,7 +1,7 @@
 file ".env" состоит из одной строки:
 TOKEN=Вставьте_Свой_Токен
 
-Libraries: 
+Libraries:
 telebot 
 python-dotenv 
 os 
