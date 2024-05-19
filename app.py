@@ -1,5 +1,4 @@
 #DataBase tg.db management
-import sqlalchemy
 import user_table
 
 #telegram bot
