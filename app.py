@@ -1,4 +1,5 @@
 #DataBase tg.db management
+import keyboard
 import user_table
 
 #telegram bot
@@ -52,10 +53,7 @@ def settings(message):
     town = str(session.query(User.town).filter(User.id == u_id).first())[2:-3]
     cfg = str(session.query(User.cfg).filter(User.id == u_id).first())[2:-3]
     session.commit()
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton("1. Ваш город ("+town+")")
-    btn2 = types.KeyboardButton("2. Категория новостей ("+cfg+")")
-    markup.add(btn1, btn2)
+    markup = keyboard.settingskeys(town, cfg)
     bot.send_message(message.chat.id, 'Что вы хотите настроить?', reply_markup=markup)
     bot.register_next_step_handler(message, setting, u_id)
 def setting(message, u_id):
@@ -89,10 +87,7 @@ def settown(message):
     session.query(User).filter_by(id=u_id).update({'town': str(message.text)})
     town = str(session.query(User.town).filter(User.id == u_id).first())[2:-3]
     session.commit()
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    btn1 = types.KeyboardButton("1. Да")
-    btn2 = types.KeyboardButton("2. Нет")
-    markup.add(btn1, btn2)
+    markup = keyboard.settownkeys()
     bot.send_message(message.chat.id, 'Ваш город - ' + town + '?', reply_markup=markup)
     bot.register_next_step_handler(message, report)
 def report(message):
@@ -112,19 +107,7 @@ def news(message):
     print(cfg)
     if check.check(u_id) == True:
         if cfg == "None":
-            markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-            btn1 = types.KeyboardButton("1. Политика")
-            btn2 = types.KeyboardButton("2. В мире")
-            btn3 = types.KeyboardButton("3. Экономика")
-            btn4 = types.KeyboardButton("4. Общество")
-            btn5 = types.KeyboardButton("5. Происшествия")
-            btn6 = types.KeyboardButton("6. Армия")
-            btn7 = types.KeyboardButton("7. Наука")
-            btn8 = types.KeyboardButton("8. Спорт")
-            btn9 = types.KeyboardButton("9. Культура")
-            btn10 = types.KeyboardButton("10. Религия")
-            btn11 = types.KeyboardButton("11. Туризм")
-            markup.add(btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, btn11)
+            markup = keyboard.newscatkeys()
             bot.send_message(message.chat.id, 'В какой категории хотите читать новости?', reply_markup=markup)
             bot.register_next_step_handler(message, newscat)
         else:
@@ -134,10 +117,10 @@ def news(message):
 
 def newscat(message):
     u_id = message.chat.id
-    cfgn = int(message.text.split('.')[0])-1
+    cfgnum = int(message.text.split('.')[0])-1
     cat = ['politics', 'world', 'economy', 'society', 'incidents','defense_safety','science','sport','culture','religion','tourism']
-    print(cfgn,cat[cfgn])
-    session.query(User).filter_by(id=u_id).update({'cfg': str(cat[cfgn])})
+    print(cfgnum,cat[cfgnum])
+    session.query(User).filter_by(id=u_id).update({'cfg': str(cat[cfgnum])})
     cfg = str(session.query(User.cfg).filter(User.id == message.chat.id).first())[2:-3]
     session.commit()
     print(cfg)

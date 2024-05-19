@@ -33,5 +33,3 @@ def parse(data):
     except:
         print("Wrong city")
         return "Неправильный город"
-if __name__ == '__main__':
-    parse()
