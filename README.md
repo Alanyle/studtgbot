@@ -1,4 +1,4 @@
-Main telegram bot is in tgdb.py,
+Main telegram bot is in app.py,
 
 Weather parser - Pamail.py (https://pogoda.mail.ru/)
 
