@@ -1,14 +1,10 @@
-#DataBase tg.db management
-import keyboard
-import user_table
-
 #telegram bot
 from telebot import TeleBot, types
 from dotenv import load_dotenv
 import os
 
 #local files
-import Pamail, Paria, Panek, check
+import Pamail, Paria, Panek, check, keyboard, user_table
 
 User, session = user_table.user()
 load_dotenv()

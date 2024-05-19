@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="33db0ccd-177c-450c-a544-994d073622f4" name="Changes" comment="Some optimisation and enhancements.">
-      <change afterPath="$PROJECT_DIR$/keyboard.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pamail.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pamail.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Panek.py" beforeDir="false" afterPath="$PROJECT_DIR$/Panek.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Paria.py" beforeDir="false" afterPath="$PROJECT_DIR$/Paria.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tg.db" beforeDir="false" afterPath="$PROJECT_DIR$/tg.db" afterDir="false" />
     </list>
@@ -152,7 +148,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716100213676</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Some optimisation and enhancements.">
+      <option name="closed" value="true" />
+      <created>1716101906483</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1716101906483</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
