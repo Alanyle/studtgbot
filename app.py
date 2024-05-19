@@ -1,27 +1,21 @@
 #DataBase tg.db management
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import sessionmaker, declarative_base
-Base = declarative_base()
-engine = create_engine('sqlite:///tg.db')
-class User(Base):
-    __tablename__ = 'users'
-    __table_args__ = {'extend_existing': True}
-    cmd = Column(String)
-    typ = Column(String)
-    town = Column(String)
-    cfg = Column(String)
-    id = Column(Integer, primary_key=True)
-Session = sessionmaker(bind=engine)
-session = Session()
-Base.metadata.create_all(engine) #creating table users if not exists
+import sqlalchemy
+import user_table
+
 #telegram bot
 from telebot import TeleBot, types
 from dotenv import load_dotenv
 import os
-load_dotenv()
-bot = TeleBot(os.getenv("TOKEN"))
+
 #local files
 import Pamail, Paria, Panek, check
+
+User, session = user_table.user()
+load_dotenv()
+bot = TeleBot(os.getenv("TOKEN"))
+
+print("bot is running on token ", os.getenv("TOKEN"))
+
 @bot.message_handler(commands=['start'])
 def start(message: types.Message):
     session.commit()
