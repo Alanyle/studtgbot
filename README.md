@@ -4,6 +4,8 @@ file ".env" contains: TOKEN=Put_Your_Token
 
 Database management - user_table.py
 
+Keyboards - keyboard.py
+
 Weather parser - Pamail.py (https://pogoda.mail.ru/)
 
 News parser - Paria.py (https://ria.ru/)
