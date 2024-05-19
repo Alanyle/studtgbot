@@ -1,4 +1,8 @@
-Main telegram bot is in app.py,
+Main telegram bot is in app.py
+
+file ".env" contains: TOKEN=Put_Your_Token
+
+Database management - user_table.py
 
 Weather parser - Pamail.py (https://pogoda.mail.ru/)
 
